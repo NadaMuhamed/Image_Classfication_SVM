@@ -49,3 +49,30 @@ svm=SVC()
 svm.fit(x,y)
 print("training Model")
 print(svm.score(x,y))
+
+
+hog_catt=[]
+hog_dogt=[]
+for i in range(1000,1100):
+    pathe_cats.append("dataset\cat."+str(i)+".jpg")
+for i in range(100,1100):
+    pathe_dogs.append("dataset\dog."+str(i)+".jpg")
+
+for i in range(1000,1100):
+    x1.append(mpimg.imread(pathe_cats[i]))
+    x1_resize.append(resize(x1[i], (128, 64)))
+    hog_catt.append(np.append(hog(x1_resize[i], orientations=9, pixels_per_cell=(8, 8),cells_per_block=(2, 2), visualize=False, multichannel=True),0))
+for i in range(1000,1100):
+    x2.append(mpimg.imread(pathe_dogs[i]))
+    x2_resize.append(resize(x2[i], (128, 64)))
+    hog_dogt.append(np.append(hog(x2_resize[i], orientations=9, pixels_per_cell=(8, 8),cells_per_block=(2, 2), visualize=False, multichannel=True),1))
+
+
+
+datat=np.append(hog_catt,hog_dogt,axis=0)
+print(datat.shape)
+np.random.shuffle(datat)
+xt = datat[:, :-1]
+yt = datat[:, -1]
+print("testing Model")
+print(svm.score(xt,yt))
